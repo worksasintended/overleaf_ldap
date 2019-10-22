@@ -297,26 +297,32 @@ const AuthenticationManager = {
                     if (err) {
                         return callback(null, null)
                     }
-                    //TODO get out if string not found
                     res.on('searchEntry', function (entry) {
                         userDn = entry.objectName
                         client.bind(userDn, passwd, function (err) {
                             if (err == null) {
                                 //console.log("ldap positive")
                                 onSuccess(query, adminMail, userObj, callback)
+                                client.unbind()
                                 return null
                             } else {
                                 //console.log("ldap negative")
+                                client.unbind()
                                 return callback(null, null)
                             }
                         })
                     })
                     res.on('error', err => {
                         console.error('error: ' + err.message);
+                        client.unbind()
                         return callback(null, null)
                     });
                     res.on('end', result => {
-                        return callback(null, null)
+                        //if nothing written (user not found)
+                        if(result.connection._writableState.writing == false){
+                            client.unbind()
+                            return callback(null, null)
+                        }
                     });
                 });
 
