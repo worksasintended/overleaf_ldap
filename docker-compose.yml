@@ -1,0 +1,78 @@
+version: '2.2'
+services:
+    sharelatex:
+        restart: always
+        image: worksasintended/overleaf-ldap
+        container_name: sharelatex
+        depends_on:
+            mongo:
+                condition: service_healthy
+            redis:
+                condition: service_started
+        privileged: false
+        ports:
+            - 80:80
+        links:
+            - mongo
+            - redis
+    #    volumes:
+    #        - ~/sharelatex_data:/var/lib/sharelatex
+        environment:
+
+            SHARELATEX_APP_NAME: Overleaf Community Edition
+
+            SHARELATEX_MONGO_URL: mongodb://mongo/sharelatex
+
+            ADMIN_MAIL: example@mail.com
+
+            DOMAIN: example.com
+
+            LDAP_SERVER: ldaps://my-server.com:636
+
+            LDAP_BIND_DN: cn=asdf,ou=asdf,dc=asdf
+
+            LDAP_BIND_PW: itsasecret
+
+            # Same property, unfortunately with different names in
+            # different locations
+            SHARELATEX_REDIS_HOST: redis
+            REDIS_HOST: redis
+
+            ENABLED_LINKED_FILE_TYPES: 'url,project_file'
+
+            # Enables Thumbnail generation using ImageMagick
+            ENABLE_CONVERSIONS: 'true'
+
+    mongo:
+        restart: always
+        image: mongo
+        container_name: mongo
+        ports:
+            - 27017
+     #   volumes:
+     #       - ~/mongo_data:/data/db
+        healthcheck:
+            test: echo 'db.stats().ok' | mongo localhost:27017/test --quiet
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    redis:
+        restart: always
+        image: redis
+        container_name: redis
+        ports:
+            - 6379
+     #   volumes:
+     #       - ~/redis_data:/data
+
+#   nginx-proxy:
+#       image: jwilder/nginx-proxy
+#       container_name: nginx-proxy
+#       ports:
+#         #- "80:80"
+#         - "443:443"
+#       volumes:
+#         - /var/run/docker.sock:/tmp/docker.sock:ro
+#         - /home/sharelatex/tmp:/etc/nginx/certs
+
