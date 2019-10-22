@@ -1,2 +1,2 @@
 # overleaf_ldap
-free ldap implementation to overleaf
+free ldap implementation for [overleaf](https://github.com/overleaf/overleaf)
