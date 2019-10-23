@@ -62,6 +62,7 @@ const AuthenticationManager = {
                     }
                     user.admin = false
 		    user.emails[0].confirmedAt = Date.now()
+	            user.save()
                     console.log("user %s added to local library", query.email)
                     User.findOne(query, (error, user) => {
                             if (error) {
@@ -285,7 +286,6 @@ const AuthenticationManager = {
         });
         const bindDn = process.env.LDAP_BIND_DN
         const bindPassword = process.env.LDAP_BIND_PW
-        //TODO: unbind
         client.bind(bindDn, bindPassword, function (err) {
             if (err == null) {
                 const opts = {
