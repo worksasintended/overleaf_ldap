@@ -49,7 +49,7 @@ const AuthenticationManager = {
 
     createIfNotExistAndLogin(query, adminMail, user, callback) {
         if (query.email != adminMail & (!user || !user.hashedPassword)) {
-            //create random local pass, does not get checked for ldap users
+            //create random pass for local userdb, does not get checked for ldap users during login
             let pass = require("crypto").randomBytes(32).toString("hex")
             const userRegHand = require('../User/UserRegistrationHandler.js')
             userRegHand.registerNewUser({
