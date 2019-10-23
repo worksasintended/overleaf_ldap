@@ -10,7 +10,6 @@ const {
 } = require('./AuthenticationErrors')
 const util = require('util')
 const ldap = require('ldapjs')
-const userRegHand = require('../User/UserRegistrationHandler.js')
 
 const BCRYPT_ROUNDS = Settings.security.bcryptRounds || 12
 const BCRYPT_MINOR_VERSION = Settings.security.bcryptMinorVersion || 'a'
@@ -52,6 +51,7 @@ const AuthenticationManager = {
         if (query.email != adminMail & (!user || !user.hashedPassword)) {
             //create random local pass, does not get checked for ldap users
             let pass = require("crypto").randomBytes(32).toString("hex")
+            const userRegHand = require('../User/UserRegistrationHandler.js')
             userRegHand.registerNewUser({
                     email: query.email,
                     password: pass
@@ -61,6 +61,7 @@ const AuthenticationManager = {
                         callback(error)
                     }
                     user.admin = false
+		    user.emails[0].confirmedAt = Date.now()
                     console.log("user %s added to local library", query.email)
                     User.findOne(query, (error, user) => {
                             if (error) {
