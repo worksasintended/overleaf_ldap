@@ -9,6 +9,9 @@ const {
     InvalidPasswordError
 } = require('./AuthenticationErrors')
 const util = require('util')
+const ldap = require('ldapjs')
+const crypto = require("crypto")
+const userRegHand = require('../User/UserRegistrationHandler.js')
 
 const BCRYPT_ROUNDS = Settings.security.bcryptRounds || 12
 const BCRYPT_MINOR_VERSION = Settings.security.bcryptMinorVersion || 'a'
@@ -48,9 +51,8 @@ const AuthenticationManager = {
 
     createIfNotExistAndLogin(query, adminMail, user, callback) {
         if (query.email != adminMail & (!user || !user.hashedPassword)) {
-            const userRegHand = require('../User/UserRegistrationHandler.js')
-            //create random local pass, does not get checked for ldap users
-            let pass = require("crypto").randomBytes(32).toString("hex")
+            //create random local pass for local db, does not get checked for ldap users during login
+            const pass = crypto.randomBytes(32).toString("hex")
             userRegHand.registerNewUser({
                     email: query.email,
                     password: pass
@@ -278,14 +280,13 @@ const AuthenticationManager = {
     },
 
     ldapAuth(query, passwd, onSuccess, callback, adminMail, userObj) {
-        const ldap = require('ldapjs')
         const client = ldap.createClient({
             url: process.env.LDAP_SERVER
         });
         const bindDn = process.env.LDAP_BIND_DN
         const bindPassword = process.env.LDAP_BIND_PW
         //TODO: unbind
-        client.bind(bindDn, bindPassword, function (err, returnVal) {
+        client.bind(bindDn, bindPassword, function (err) {
             if (err == null) {
                 const opts = {
                     filter: '(&(objectClass=posixAccount)(uid=' + query.email.split('@')[0] + '))',
