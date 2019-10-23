@@ -1,7 +1,8 @@
 # overleaf_ldap
 ldap implementation for the overleaf community edition [overleaf](https://github.com/overleaf/overleaf)
 
-Work by [kemnitzs](https://github.com/kemnitzs) and [worksasintended](https://github.com/worksasintended)
+Work by [kemnitzs](https://github.com/kemnitzs) and [worksasintended](https://github.com/worksasintended).
+
 This solution uses ldapjs.
 
 ## Usage
