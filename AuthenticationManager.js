@@ -10,7 +10,6 @@ const {
 } = require('./AuthenticationErrors')
 const util = require('util')
 const ldap = require('ldapjs')
-const crypto = require("crypto")
 const userRegHand = require('../User/UserRegistrationHandler.js')
 
 const BCRYPT_ROUNDS = Settings.security.bcryptRounds || 12
@@ -51,8 +50,8 @@ const AuthenticationManager = {
 
     createIfNotExistAndLogin(query, adminMail, user, callback) {
         if (query.email != adminMail & (!user || !user.hashedPassword)) {
-            //create random local pass for local db, does not get checked for ldap users during login
-            const pass = crypto.randomBytes(32).toString("hex")
+            //create random local pass, does not get checked for ldap users
+            let pass = require("crypto").randomBytes(32).toString("hex")
             userRegHand.registerNewUser({
                     email: query.email,
                     password: pass
