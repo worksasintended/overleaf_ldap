@@ -18,19 +18,12 @@ services:
     #    volumes:
     #        - ~/sharelatex_data:/var/lib/sharelatex
         environment:
-
             SHARELATEX_APP_NAME: Overleaf Community Edition
-
             SHARELATEX_MONGO_URL: mongodb://mongo/sharelatex
-
             ADMIN_MAIL: example@mail.com
-
             DOMAIN: example.com
-
             LDAP_SERVER: ldaps://my-server.com:636
-
             LDAP_BIND_DN: cn=asdf,ou=asdf,dc=asdf
-
             LDAP_BIND_PW: itsasecret
 
             # Same property, unfortunately with different names in
