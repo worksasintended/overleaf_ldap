@@ -27,7 +27,7 @@ docker-compose up -d
 
 ## Building the image
 
-The image `worksasintended/overleaf-ldap` is available at [dockerhub](https://cloud.docker.com/u/worksasintended/repository/docker/worksasintended/overleaf_ldap)
+The image `worksasintended/overleaf_ldap` is available at [dockerhub](https://cloud.docker.com/u/worksasintended/repository/docker/worksasintended/overleaf_ldap)
 
 You can also build it yourself simply using the `docker build` command or the `build` script. 
 
