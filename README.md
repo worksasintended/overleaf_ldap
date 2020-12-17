@@ -1,3 +1,7 @@
+# Announcment
+
+For those still interested on this topic, there will soon be a new version comming.
+
 # overleaf_ldap
 ldap implementation for the overleaf community edition [overleaf](https://github.com/overleaf/overleaf)
 
